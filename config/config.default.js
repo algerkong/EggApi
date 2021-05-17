@@ -23,6 +23,38 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
 
+  config.security = {
+    csrf: {
+      enable: false
+    }
+  }
+
+  config.jwt = {
+    secret: 'liujunjie'
+  }
+
+
+  config.cors = {
+    origin: "*",
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+    credentials: true
+  }
+
+  config.view = {
+    defaultViewEngine: 'nunjucks'
+  }
+
+
+  config.sequelize = {
+    delect: 'mysql',
+    database: 'photo',
+    host: 'localhost',
+    post: 3306,
+    username: 'photo',
+    password: 'photo',
+    timezone: '+08:00'
+  }
+
   return {
     ...config,
     ...userConfig,
