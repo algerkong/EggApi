@@ -14,7 +14,28 @@ class DynamicService extends Service {
 
     //获取动态列表详情
     async getDynamicList() {
+        let query = this.ctx.query
+        console.log("aaaaaaaaaaaaaaaaaaa", query);
+        let offset = query.offset ? parseInt(query.offset) : 0
+        let limit = query.limit ? parseInt(query.limit) : 2
+
+        console.log("请求的页数", offset, limit);
+
+        if (query.userId) {
+
+            console.log("错误1");
+            return await this.getUserDynamic({ userId: query.userId, offset, limit })
+        } else {
+            console.log("错误2");
+
+            return await this.getList({ offset, limit })
+        }
+    }
+
+    async getList(body) {
         const dynamicList = await this.app.model.Dynamic.findAll({
+            offset: body.offset,
+            limit: body.limit,
             include: [{
                 model: this.ctx.model.User
             }, {
@@ -41,13 +62,29 @@ class DynamicService extends Service {
     }
 
     //获取用户动态列表
-    async getUserDynamic(id) {
+    async getUserDynamic(body) {
         const dynamicList = await this.app.model.Dynamic.findAll({
+            offset: body.offset,
+            limit: body.limit,
             where: {
-                userId: id
+                userId: body.userId
             },
             include: [{
                 model: this.ctx.model.User
+            }, {
+                model: this.ctx.model.Comment,
+                include: [
+                    {
+                        model: this.ctx.model.User
+                    }
+                ]
+            }, {
+                model: this.ctx.model.Praise,
+                include: [
+                    {
+                        model: this.ctx.model.User
+                    }
+                ]
             }],
             order: [
                 ['created_at', 'DESC']
