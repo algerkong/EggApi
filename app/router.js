@@ -12,7 +12,9 @@ module.exports = app => {
   router.post('/api/login', controller.login.login)
 
   //用户接口
-  router.resources('user', '/api/user', app.middleware.checktoken(), controller.user)
+  // router.resources('user', '/api/user', app.middleware.checktoken(), controller.user)
+
+  router.resources('user', '/api/user', controller.user)
   //动态接口
   router.resources('dynamic', '/api/dynamic', controller.dynamic)
   //查询动态
@@ -21,4 +23,9 @@ module.exports = app => {
   //点赞接口
   router.resources('praise', '/api/praise', controller.praise)
 
+  //标签接口
+  router.resources('tag', '/api/tag', controller.tag)
+
+  //评论
+  router.resources('comment', '/api/comment', controller.comment)
 };

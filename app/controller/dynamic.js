@@ -24,8 +24,10 @@ class DynamicController extends Controller {
 
     async index() {
         const { ctx } = this;
+        let query = ctx.query
+        console.log("sssssssssssssssssssssssssssss", query);
         try {
-            const userList = await ctx.service.dynamic.getDynamicList()
+            const userList = await ctx.service.dynamic.getList(query)
             ctx.body = {
                 code: 200,
                 message: '请求成功',
@@ -42,7 +44,6 @@ class DynamicController extends Controller {
 
     async destroy() {
         const { ctx } = this;
-        console.log("aaaaaaaaaaaaaaa");
         try {
             const id = ctx.params.id
             console.log(await ctx.service.user.deleteUser(id));

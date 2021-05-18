@@ -9,50 +9,43 @@ class DynamicService extends Service {
         return true
     }
 
-
-    //获取动态列表
-
     //获取动态列表详情
-    async getDynamicList() {
-        let query = this.ctx.query
-        console.log("aaaaaaaaaaaaaaaaaaa", query);
+    async getDynamicList(query) {
         let offset = query.offset ? parseInt(query.offset) : 0
         let limit = query.limit ? parseInt(query.limit) : 2
-
-        console.log("请求的页数", offset, limit);
-
         if (query.userId) {
-
-            console.log("错误1");
             return await this.getUserDynamic({ userId: query.userId, offset, limit })
         } else {
-            console.log("错误2");
-
             return await this.getList({ offset, limit })
         }
     }
 
-    async getList(body) {
+    async getList(query) {
+
+        let offset = query.offset ? parseInt(query.offset) : 0
+        let limit = query.limit ? parseInt(query.limit) : 2
         const dynamicList = await this.app.model.Dynamic.findAll({
-            offset: body.offset,
-            limit: body.limit,
-            include: [{
-                model: this.ctx.model.User
-            }, {
-                model: this.ctx.model.Comment,
-                include: [
-                    {
-                        model: this.ctx.model.User
-                    }
-                ]
-            }, {
-                model: this.ctx.model.Praise,
-                include: [
-                    {
-                        model: this.ctx.model.User
-                    }
-                ]
-            }],
+            // offset,
+            // limit,
+            include: [
+                {
+                    model: this.ctx.model.User
+                },
+                {
+                    model: this.ctx.model.Comment,
+                    include: [
+                        {
+                            model: this.ctx.model.User
+                        }
+                    ]
+                }, {
+                    model: this.ctx.model.Praise,
+                    include: [
+                        {
+                            model: this.ctx.model.User
+                        }
+                    ]
+                }],
             order: [
                 ['created_at', 'DESC']
             ],
@@ -111,8 +104,27 @@ class DynamicService extends Service {
 
     //点赞
     async praiseDynamic(body) {
-        await this.app.model.Praise.create(body)
-        return true
+        if (await this.getIsPraise(body)) {
+            await this.app.model.Praise.create(body)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    //判断是否点过赞
+    async getIsPraise(body) {
+        let praise = await this.app.model.Praise.findOne({
+            where: {
+                userId: body.userId,
+                dynamicId: body.dynamicId
+            }
+        })
+        if (praise) {
+            return false
+        } else {
+            return true
+        }
     }
 
     //取消点赞
@@ -141,6 +153,8 @@ class DynamicService extends Service {
         )
         return praiseList
     }
+
+
 
 
     //获取动态点赞列表

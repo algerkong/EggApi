@@ -17,10 +17,7 @@ module.exports = app => {
             title: STRING,
             content: TEXT,
             tag: STRING,
-            releaseId: UUID,
-            receiveId: UUID,
             is: INTEGER,
-
             status: {
                 type: INTEGER,
                 defaultValue: 0
@@ -30,6 +27,18 @@ module.exports = app => {
         }
     )
 
+    Order.associate = function () {
+
+        // //与用户是多对一
+        // app.model.Dynamic.belongsTo(app.model.User, {
+        //     foreignKey: 'releaseId'
+        // })
+
+        // //与用户是多对一
+        // app.model.Dynamic.belongsTo(app.model.User, {
+        //     foreignKey: 'receiveId'
+        // })
+    }
 
     return Order
 }

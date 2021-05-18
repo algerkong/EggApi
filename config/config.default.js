@@ -45,25 +45,25 @@ module.exports = appInfo => {
   }
 
   //学校
-  // config.sequelize = {
-  //   delect: 'mysql',
-  //   database: 'photo',
-  //   host: 'localhost',
-  //   post: 3306,
-  //   username: 'photo',
-  //   password: 'photo',
-  //   timezone: '+08:00'
-  // }
-  //公司
   config.sequelize = {
     delect: 'mysql',
     database: 'photo',
     host: 'localhost',
     post: 3306,
-    username: 'root',
-    password: '123456',
+    username: 'photo',
+    password: 'photo',
     timezone: '+08:00'
   }
+  //公司
+  // config.sequelize = {
+  //   delect: 'mysql',
+  //   database: 'photo',
+  //   host: 'localhost',
+  //   post: 3306,
+  //   username: 'root',
+  //   password: '123456',
+  //   timezone: '+08:00'
+  // }
   return {
     ...config,
     ...userConfig,

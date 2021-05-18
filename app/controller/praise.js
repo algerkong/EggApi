@@ -7,10 +7,17 @@ class PraiseController extends Controller {
         const { ctx } = this;
         const body = ctx.request.body
         try {
-            await ctx.service.dynamic.praiseDynamic(body)
-            this.ctx.body = {
-                code: 200,
-                msg: '点赞成功'
+            let isPraise = await ctx.service.dynamic.praiseDynamic(body)
+            if (isPraise) {
+                this.ctx.body = {
+                    code: 200,
+                    msg: '点赞成功'
+                }
+            } else {
+                this.ctx.body = {
+                    code: 201,
+                    msg: '已经点过赞了'
+                }
             }
 
         } catch (e) {
@@ -41,101 +48,12 @@ class PraiseController extends Controller {
     }
 
     async destroy() {
-        const { ctx } = this;
-        console.log("aaaaaaaaaaaaaaa");
         try {
-            const id = ctx.params.id
-            console.log(await ctx.service.user.deleteUser(id));
-            ctx.body = {
-                code: 200,
-                message: '请求成功'
-            }
-        } catch (error) {
-            console.log(error);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
-            }
-        }
-    }
-
-    async update() {
-        const { ctx } = this;
-        try {
-            const body = ctx.request.body
-            const id = ctx.params.id
-
-            if (await ctx.service.user.findNameUser(body.username)) {
-                await ctx.service.user.updateUser(id, body)
-                this.ctx.body = {
-                    code: 200,
-                    msg: '修改成功',
-                    body: body
-                }
-            } else {
-                this.ctx.body = {
-                    code: 201,
-                    msg: '用户名已存在'
-                }
-            }
-        } catch (error) {
-            console.log(error);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
-            }
-        }
-    }
-
-    async getFuzzy() {
-        const { ctx } = this;
-        try {
-            const str = ctx.params.str
-            console.log(ctx);
-            let dynamicList = await ctx.service.dynamic.findFuzzyDynamic(str)
+            let body = this.ctx.query
+            await this.service.dynamic.cancelPraiseDynamic(body)
             this.ctx.body = {
                 code: 200,
-                msg: '请求成功',
-                body: dynamicList
-            }
-        } catch (error) {
-            console.log(error);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
-            }
-        }
-    }
-
-    async giveLike() {
-        const { ctx } = this;
-        const body = ctx.request.body
-        try {
-            await ctx.service.dynamic.praiseDynamic(body)
-            this.ctx.body = {
-                code: 200,
-                msg: '点赞成功'
-            }
-
-        } catch (e) {
-            console.log(e);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
-            }
-        }
-
-    }
-
-
-    async cancelLike() {
-        const { ctx } = this;
-        const body = ctx.request.body
-        try {
-            await ctx.service.dynamic.cancelPraiseDynamic(body)
-            this.ctx.body = {
-                code: 200,
-                msg: '取消成功'
+                msg: '取消点赞成功'
             }
         } catch (e) {
             console.log(e);
@@ -145,12 +63,6 @@ class PraiseController extends Controller {
             }
         }
     }
-
-
-    async getLikeList() {
-
-    }
-
 
 }
 
