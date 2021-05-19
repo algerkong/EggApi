@@ -6,12 +6,13 @@ class LoginController extends Controller {
     async login() {
         try {
             const body = this.ctx.request.body
-            const token = await this.ctx.service.user.login(body.username, body.password)
-            if (token) {
+            const data = await this.ctx.service.user.login(body.username, body.password)
+            if (data) {
                 this.ctx.body = {
                     code: 200,
                     message: "登录成功",
-                    token: token
+                    token: data.token,
+                    data: data
                 }
             } else {
                 this.ctx.body = {

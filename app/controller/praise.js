@@ -64,6 +64,23 @@ class PraiseController extends Controller {
         }
     }
 
+    async getPraiseList() {
+        try {
+            let praiseList = await this.service.dynamic.getPraiseList()
+            this.ctx.body = {
+                code: 200,
+                msg: '获取成功',
+                data: praiseList
+            }
+        } catch (e) {
+            console.log(e);
+            this.ctx.body = {
+                code: 400,
+                msg: '请求失败'
+            }
+        }
+    }
+
 }
 
 module.exports = PraiseController;

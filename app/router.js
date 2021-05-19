@@ -15,17 +15,33 @@ module.exports = app => {
   // router.resources('user', '/api/user', app.middleware.checktoken(), controller.user)
 
   router.resources('user', '/api/user', controller.user)
+
+
   //动态接口
   router.resources('dynamic', '/api/dynamic', controller.dynamic)
-  //查询动态
+
+  //动态 评论 用户 图片添加
+  router.post('/api/dynamic/addimg', controller.dynamic.addImg)
+
+  //模糊查询动态
   router.get('/api/dynamic/search/:str', controller.dynamic.getFuzzy)
+
 
   //点赞接口
   router.resources('praise', '/api/praise', controller.praise)
+  router.get('/api/praise/all', controller.praise.getPraiseList)
+
 
   //标签接口
   router.resources('tag', '/api/tag', controller.tag)
 
+
   //评论
   router.resources('comment', '/api/comment', controller.comment)
+  router.get('/api/comment/all', controller.comment.getCommentList)
+
+
+
+  //图片上传接口
+  router.post('/api/upload', controller.upload.index)
 };

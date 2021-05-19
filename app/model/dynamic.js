@@ -37,16 +37,18 @@ module.exports = app => {
             foreignKey: 'userId'
         })
 
-        //与标签是多对多
-        app.model.Dynamic.belongsToMany(app.model.Tag, {
-            through: app.model.TagDynamic,
-            foreignKey: 'dynamicId',
-            as: 'dynamic',
-            otherKey: 'tagId'
+        //与标签是多对一
+        app.model.Dynamic.belongsTo(app.model.Tag, {
+            foreignKey: 'tagId',
         })
 
         //与评论是一对多
         app.model.Dynamic.hasMany(app.model.Comment, {
+            foreignKey: 'dynamicId'
+        })
+
+        //与图片是一对多
+        app.model.Dynamic.hasMany(app.model.Img, {
             foreignKey: 'dynamicId'
         })
 

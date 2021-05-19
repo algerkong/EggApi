@@ -72,7 +72,7 @@ class UserService extends Service {
                     const token = this.app.jwt.sign({
                         username: username
                     }, this.app.config.jwt.secret)
-                    return token
+                    return { token, user }
                 } else {
                     return null
                 }

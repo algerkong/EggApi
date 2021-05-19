@@ -32,13 +32,20 @@ class DynamicService extends Service {
                     model: this.ctx.model.User
                 },
                 {
+                    model: this.ctx.model.Img
+                },
+                {
                     model: this.ctx.model.Comment,
                     include: [
                         {
                             model: this.ctx.model.User
                         }
                     ]
-                }, {
+                },
+                {
+                    model: this.ctx.model.Tag,
+                },
+                {
                     model: this.ctx.model.Praise,
                     include: [
                         {
@@ -64,14 +71,19 @@ class DynamicService extends Service {
             },
             include: [{
                 model: this.ctx.model.User
-            }, {
+            },
+            {
+                model: this.ctx.model.Img
+            },
+            {
                 model: this.ctx.model.Comment,
                 include: [
                     {
                         model: this.ctx.model.User
                     }
                 ]
-            }, {
+            },
+            {
                 model: this.ctx.model.Praise,
                 include: [
                     {
@@ -166,9 +178,6 @@ class DynamicService extends Service {
                 },
                 include: [{
                     model: this.ctx.model.User
-                },
-                {
-                    model: this.ctx.model.Dynamic
                 }],
                 order: [
                     ['created_at', 'DESC']

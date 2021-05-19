@@ -29,6 +29,11 @@ module.exports = app => {
             foreignKey: 'userId'
         })
 
+        //与图片是一对多
+        app.model.User.hasMany(app.model.Img, {
+            foreignKey: 'userId'
+        })
+
         //与评论是一对多
         app.model.User.hasMany(app.model.Comment, {
             foreignKey: 'userId'

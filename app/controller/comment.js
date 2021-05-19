@@ -55,6 +55,24 @@ class PraiseController extends Controller {
             }
         }
     }
+
+    async getCommentList() {
+        try {
+            let commentList = await this.service.comment.getCommentListAll()
+            this.ctx.body = {
+                code: 200,
+                msg: "请求成功",
+                data: commentList
+            }
+
+        } catch (e) {
+            console.log(e);
+            this.ctx.body = {
+                code: 400,
+                msg: '请求失败'
+            }
+        }
+    }
 }
 
 module.exports = PraiseController;

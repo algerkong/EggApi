@@ -19,14 +19,10 @@ module.exports = app => {
     )
 
     Tag.associate = function () {
-        // 与标签是多对多
-        app.model.Tag.belongsToMany(app.model.Dynamic, {
-            through: app.model.TagDynamic,
-            foreignKey: 'dynamicId',
-            as: 'tag',
-            otherKey: 'tagId'
+        //与动态是一对多
+        app.model.Tag.hasMany(app.model.Dynamic, {
+            foreignKey: 'tagId'
         })
-
     };
 
     return Tag

@@ -25,9 +25,8 @@ class DynamicController extends Controller {
     async index() {
         const { ctx } = this;
         let query = ctx.query
-        console.log("sssssssssssssssssssssssssssss", query);
         try {
-            const userList = await ctx.service.dynamic.getList(query)
+            const userList = await ctx.service.dynamic.getDynamicList(query)
             ctx.body = {
                 code: 200,
                 message: '请求成功',
@@ -108,38 +107,17 @@ class DynamicController extends Controller {
         }
     }
 
-    async giveLike() {
-        const { ctx } = this;
-        const body = ctx.request.body
+    async addImg() {
+        const body = this.ctx.request.body
         try {
-            await ctx.service.dynamic.praiseDynamic(body)
+            await this.ctx.service.img.createImg(body)
             this.ctx.body = {
                 code: 200,
-                msg: '点赞成功'
+                msg: '添加成功',
+                body: body
             }
-
-        } catch (e) {
-            console.log(e);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
-            }
-        }
-
-    }
-
-
-    async cancelLike() {
-        const { ctx } = this;
-        const body = ctx.request.body
-        try {
-            await ctx.service.dynamic.cancelPraiseDynamic(body)
-            this.ctx.body = {
-                code: 200,
-                msg: '取消成功'
-            }
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            console.log(error);
             ctx.body = {
                 code: 400,
                 msg: '请求失败'
@@ -147,23 +125,6 @@ class DynamicController extends Controller {
         }
     }
 
-
-    async getLikeList() {
-        try {
-            let likeList = await this.ctx.service.dynamic.getPraiseList()
-            this.ctx.body = {
-                code: 200,
-                msg: '请求成功',
-                data: likeList
-            }
-        } catch (e) {
-            console.log(e);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
-            }
-        }
-    }
 
 
 }
