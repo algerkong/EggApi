@@ -30,6 +30,11 @@ module.exports = app => {
             foreignKey: 'dynamicId'
         })
 
+        //与动态是多对一
+        app.model.Img.belongsTo(app.model.Order, {
+            foreignKey: 'orderId'
+        })
+
         //与评论是一对一
         app.model.Img.belongsTo(app.model.Comment, {
             foreignKey: 'commentId'

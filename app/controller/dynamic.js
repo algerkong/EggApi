@@ -45,7 +45,7 @@ class DynamicController extends Controller {
         const { ctx } = this;
         try {
             const id = ctx.params.id
-            console.log(await ctx.service.user.deleteUser(id));
+            console.log(await ctx.service.dynamic.deleteDynamic(id));
             ctx.body = {
                 code: 200,
                 message: '请求成功'
@@ -64,19 +64,11 @@ class DynamicController extends Controller {
         try {
             const body = ctx.request.body
             const id = ctx.params.id
-
-            if (await ctx.service.user.findNameUser(body.username)) {
-                await ctx.service.user.updateUser(id, body)
-                this.ctx.body = {
-                    code: 200,
-                    msg: '修改成功',
-                    body: body
-                }
-            } else {
-                this.ctx.body = {
-                    code: 201,
-                    msg: '用户名已存在'
-                }
+            await ctx.service.dynamic.updateDynamic(id, body)
+            ctx.body = {
+                code: 200,
+                msg: '修改成功',
+                body: body
             }
         } catch (error) {
             console.log(error);
@@ -90,9 +82,10 @@ class DynamicController extends Controller {
     async getFuzzy() {
         const { ctx } = this;
         try {
-            const str = ctx.params.str
+            const str = ctx.query.str
+            const body = ctx.query
             console.log(ctx);
-            let dynamicList = await ctx.service.dynamic.findFuzzyDynamic(str)
+            let dynamicList = await ctx.service.dynamic.findFuzzyDynamic(str, body)
             this.ctx.body = {
                 code: 200,
                 msg: '请求成功',

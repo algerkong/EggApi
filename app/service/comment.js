@@ -12,14 +12,23 @@ class CommentService extends Service {
     //获取评论列表
     async getCommentList(body) {
         let commentList = await this.app.model.Comment.findAll({
-            where: body
+            where: body,
+            order: [
+                ['created_at', 'DESC']
+            ],
         });
         return commentList
     }
 
     //获取全部评论列表
     async getCommentListAll() {
-        let commentList = await this.app.model.Comment.findAll();
+        let commentList = await this.app.model.Comment.findAll(
+            {
+                order: [
+                    ['created_at', 'DESC']
+                ],
+            }
+        );
         return commentList
     }
 

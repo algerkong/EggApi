@@ -39,7 +39,6 @@ class UserService extends Service {
 
     //删除账号
     async deleteUser(id) {
-        console.log("aaaaaaaaaaaaaa");
         await this.app.model.User.destroy({
             where: {
                 id

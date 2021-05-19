@@ -24,7 +24,7 @@ module.exports = app => {
   router.post('/api/dynamic/addimg', controller.dynamic.addImg)
 
   //模糊查询动态
-  router.get('/api/dynamic/search/:str', controller.dynamic.getFuzzy)
+  router.get('/api/dynamic/search', controller.dynamic.getFuzzy)
 
 
   //点赞接口
@@ -40,6 +40,9 @@ module.exports = app => {
   router.resources('comment', '/api/comment', controller.comment)
   router.get('/api/comment/all', controller.comment.getCommentList)
 
+  //订单接口
+  router.resources('order', '/api/order', controller.order)
+  router.get('/api/order/search', controller.order.fuzzyOrder)
 
 
   //图片上传接口

@@ -9,10 +9,27 @@ class DynamicService extends Service {
         return true
     }
 
+    async deleteDynamic(id) {
+        await this.app.model.Dynamic.destroy({
+            where: {
+                id
+            }
+        })
+    }
+
+    //动态修改
+    async updateDynamic(id, body) {
+        await this.app.model.Dynamic.update(body, {
+            where: {
+                id
+            }
+        })
+    }
+
     //获取动态列表详情
     async getDynamicList(query) {
         let offset = query.offset ? parseInt(query.offset) : 0
-        let limit = query.limit ? parseInt(query.limit) : 2
+        let limit = query.limit ? parseInt(query.limit) : 20
         if (query.userId) {
             return await this.getUserDynamic({ userId: query.userId, offset, limit })
         } else {
@@ -100,8 +117,10 @@ class DynamicService extends Service {
     }
 
     //模糊查询动态
-    async findFuzzyDynamic(str) {
+    async findFuzzyDynamic(str, body) {
         const Op = this.app.Sequelize.Op
+        let offset = body.offset ? parseInt(body.offset) : 0
+        let limit = body.limit ? parseInt(body.limit) : 20
         const dynamicList = await this.app.model.Dynamic.findAll({
             where: {
                 [Op.or]: [
@@ -110,6 +129,9 @@ class DynamicService extends Service {
                     { html_text: { [Op.like]: `%${str}%` } },
                 ]
             },
+            order: [
+                ['created_at', 'DESC']
+            ],
         })
         return dynamicList
     }

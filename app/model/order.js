@@ -22,8 +22,7 @@ module.exports = app => {
                 type: INTEGER,
                 defaultValue: 0
             },
-            price: FLOAT,
-            imgList: STRING
+            price: FLOAT
         }
     )
 
@@ -35,6 +34,11 @@ module.exports = app => {
         //与接收订单是一对一
         app.model.Order.hasOne(app.model.ReceiveOrder, {
             foreignKey: 'orderId'
+        })
+
+        //与图片是一对多
+        app.model.Order.hasMany(app.model.Img, {
+            foreignKey: 'ordeId'
         })
     }
 
