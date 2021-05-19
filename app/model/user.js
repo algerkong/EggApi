@@ -44,10 +44,15 @@ module.exports = app => {
             foreignKey: 'userId'
         })
 
-        //与订单是一对多
-        // app.model.User.hasMany(app.model.Order, {
-        //     foreignKey: 'userId'
-        // })
+        // 与订单是一对多
+        app.model.User.hasMany(app.model.Order, {
+            foreignKey: 'userId'
+        })
+
+        // 与接收订单是一对多
+        app.model.User.hasMany(app.model.ReceiveOrder, {
+            foreignKey: 'userId'
+        })
 
     }
 

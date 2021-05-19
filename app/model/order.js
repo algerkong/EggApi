@@ -28,16 +28,14 @@ module.exports = app => {
     )
 
     Order.associate = function () {
-
-        // //与用户是多对一
-        // app.model.Dynamic.belongsTo(app.model.User, {
-        //     foreignKey: 'releaseId'
-        // })
-
-        // //与用户是多对一
-        // app.model.Dynamic.belongsTo(app.model.User, {
-        //     foreignKey: 'receiveId'
-        // })
+        //与用户是多对一
+        app.model.Order.belongsTo(app.model.User, {
+            foreignKey: 'userId'
+        })
+        //与接收订单是一对一
+        app.model.Order.hasOne(app.model.ReceiveOrder, {
+            foreignKey: 'orderId'
+        })
     }
 
     return Order
