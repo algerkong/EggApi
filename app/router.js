@@ -43,6 +43,8 @@ module.exports = app => {
   //订单接口
   router.resources('order', '/api/order', controller.order)
   router.get('/api/order/search', controller.order.fuzzyOrder)
+  //接收订单
+  router.resources('receiveOrder', '/api/receiveorder', controller.receiveOrder)
 
 
   //图片上传接口
