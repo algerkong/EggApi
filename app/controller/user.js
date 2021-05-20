@@ -7,6 +7,8 @@ class UserController extends Controller {
         const { ctx } = this;
         try {
             const body = ctx.request.body
+
+            console.log(body);
             if (await ctx.service.user.findNameUser(body.username)) {
                 await ctx.service.user.createUser(body)
                 this.ctx.body = {
@@ -32,7 +34,7 @@ class UserController extends Controller {
     async index() {
         const { ctx } = this;
         try {
-            const userList = await ctx.service.user.getUserList()
+            const userList = await ctx.service.user.getUserList(this.ctx.query)
             ctx.body = {
                 code: 200,
                 message: '请求成功',

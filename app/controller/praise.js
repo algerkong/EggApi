@@ -66,7 +66,7 @@ class PraiseController extends Controller {
 
     async getPraiseList() {
         try {
-            let praiseList = await this.service.dynamic.getPraiseList()
+            let praiseList = await this.service.dynamic.getPraiseList(this.ctx.query)
             this.ctx.body = {
                 code: 200,
                 msg: '获取成功',

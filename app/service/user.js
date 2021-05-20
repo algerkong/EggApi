@@ -9,23 +9,54 @@ class UserService extends Service {
         return true
     }
 
+
+
     //获取账号列表
-    async getUserList() {
-        const userList = await this.app.model.User.findAll()
+
+    async getUserList(query) {
+
+        console.log(query);
+        try {
+            if (query.username) {
+                return await this.findNameUser(query.username, query)
+            } else {
+                return await this.getUser(query)
+            }
+        } catch (e) {
+            console.log(e);
+            return await this.getUser(query)
+        }
+    }
+
+    async getUser(query) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
+        const userList = await this.app.model.User.findAll({
+            offset: (page - 1) * count,
+            limit: count
+        })
         return userList
     }
 
-    async findNameUser(username) {
+    async findNameUser(username, query) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         const userList = await this.app.model.User.findAll({
+            offset: (page - 1) * count,
+            limit: count,
             where: {
-                username
+                username: username
             }
         })
-        if (userList.length > 0) {
-            return false
-        } else {
-            return true
-        }
+        return userList
     }
 
     async findIdUser(id) {
@@ -34,8 +65,6 @@ class UserService extends Service {
                 id
             }
         })
-
-        console.log(user, "获取用户信息");
         return user.dataValues
     }
 
@@ -67,7 +96,6 @@ class UserService extends Service {
                     username
                 }
             })
-            console.log(user, "aaaaaaaaaaaaa");
             if (user) {
                 if (password == user.password) {
                     const token = this.app.jwt.sign({

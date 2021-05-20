@@ -28,22 +28,25 @@ class DynamicService extends Service {
 
     //获取动态列表详情
     async getDynamicList(query) {
-        let offset = query.offset ? parseInt(query.offset) : 0
-        let limit = query.limit ? parseInt(query.limit) : 20
-        if (query.userId) {
-            return await this.getUserDynamic({ userId: query.userId, offset, limit })
+
+        if (query.userId !== undefined) {
+
+            return await this.getUserDynamic(query.userId, query)
         } else {
-            return await this.getList({ offset, limit })
+            return await this.getList(query)
         }
     }
 
     async getList(query) {
-
-        let offset = query.offset ? parseInt(query.offset) : 0
-        let limit = query.limit ? parseInt(query.limit) : 2
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         const dynamicList = await this.app.model.Dynamic.findAll({
-            // offset,
-            // limit,
+            offset: (page - 1) * count,
+            limit: count,
             include: [
                 {
                     model: this.ctx.model.User
@@ -79,12 +82,18 @@ class DynamicService extends Service {
     }
 
     //获取用户动态列表
-    async getUserDynamic(body) {
+    async getUserDynamic(userId, query) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         const dynamicList = await this.app.model.Dynamic.findAll({
-            offset: body.offset,
-            limit: body.limit,
+            offset: (page - 1) * count,
+            limit: count,
             where: {
-                userId: body.userId
+                userId: userId
             },
             include: [{
                 model: this.ctx.model.User
@@ -119,9 +128,11 @@ class DynamicService extends Service {
     //模糊查询动态
     async findFuzzyDynamic(str, body) {
         const Op = this.app.Sequelize.Op
-        let offset = body.offset ? parseInt(body.offset) : 0
-        let limit = body.limit ? parseInt(body.limit) : 20
+        let offset = body ? parseInt(body.offset) : 0
+        let limit = body ? parseInt(body.limit) : 20
         const dynamicList = await this.app.model.Dynamic.findAll({
+            offset: offset,
+            limit: limit,
             where: {
                 [Op.or]: [
                     { title: { [Op.like]: `%${str}%` } },
@@ -170,9 +181,17 @@ class DynamicService extends Service {
     }
 
     //获取点赞列表
-    async getPraiseList() {
+    async getPraiseList(body) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         let praiseList = await this.app.model.Praise.findAll(
             {
+                offset: (page - 1) * count,
+                limit: count,
                 include: [{
                     model: this.ctx.model.User
                 },
@@ -212,8 +231,16 @@ class DynamicService extends Service {
 
     //获取用户点赞动态列表
     async getUserPraiceList(id) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         let praiseList = await this.app.model.Praise.findAll(
             {
+                offset: (page - 1) * count,
+                limit: count,
                 where: {
                     userId: id
                 },

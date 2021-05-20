@@ -39,7 +39,6 @@ class LoginController extends Controller {
             userInfo.roles = "admin"
             userInfo.name = userInfo.nickName
             userInfo.avatar = "https://gitee.com/codeluojay/TyproaImage/raw/master/images/springboot-vue-structure.png"
-            console.log(userInfo);
             ctx.body = {
                 code: 200,
                 message: "获取用户信息",

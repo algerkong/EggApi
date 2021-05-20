@@ -1,7 +1,7 @@
 module.exports = () => {
     return async function (ctx, next) {
         try {
-            let token = ctx.query.token;
+            let token = ctx.request.header['token'];
             if (token) {
                 let decode = ctx.app.jwt.verify(token, ctx.app.config.jwt.secret)
                 console.log("decode", decode);

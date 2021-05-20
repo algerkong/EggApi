@@ -33,7 +33,7 @@ class DynamicController extends Controller {
                 data: userList
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             ctx.body = {
                 code: 400,
                 msg: '请求失败'
@@ -83,9 +83,7 @@ class DynamicController extends Controller {
         const { ctx } = this;
         try {
             const str = ctx.query.str
-            const body = ctx.query
-            console.log(ctx);
-            let dynamicList = await ctx.service.dynamic.findFuzzyDynamic(str, body)
+            let dynamicList = await ctx.service.dynamic.findFuzzyDynamic(str, ctx.query)
             this.ctx.body = {
                 code: 200,
                 msg: '请求成功',
