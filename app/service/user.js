@@ -45,10 +45,10 @@ class UserService extends Service {
     async findNameUser(username, query) {
         let page = 1
         let count = 20
-        if (query.page !== undefined && query.count !== undefined) {
-            page = parseInt(query.page)
-            count = parseInt(query.count)
-        }
+        // if (query.page !== undefined && query.count !== undefined) {
+        //     page = parseInt(query.page)
+        //     count = parseInt(query.count)
+        // }
         const userList = await this.app.model.User.findAll({
             offset: (page - 1) * count,
             limit: count,

@@ -10,12 +10,11 @@ module.exports = app => {
 
   //登陆
   router.post('/api/login', controller.login.login)
-  router.get('/api/login/info', controller.login.info)
+  router.get('/api/login/info', app.middleware.checktoken(), controller.login.info)
   router.get('/api/login/logout', controller.login.logout)
 
   //用户接口
   // router.resources('user', '/api/user', app.middleware.checktoken(), controller.user)
-
   router.resources('user', '/api/user', controller.user)
 
 
@@ -51,4 +50,8 @@ module.exports = app => {
 
   //图片上传接口
   router.post('/api/upload', controller.upload.index)
+  //获取全部图片接口
+  router.get('/api/img/all', controller.upload.getImgList)
+  //删除图片
+  router.put('/api/img', controller.upload.destory)
 };

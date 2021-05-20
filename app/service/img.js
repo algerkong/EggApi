@@ -24,6 +24,15 @@ class DynamicService extends Service {
 
         return imgList
     }
+
+    //删除图片
+    async deleteImg(id) {
+        await this.app.model.Img.destory({
+            where: {
+                id
+            }
+        })
+    }
 }
 
 

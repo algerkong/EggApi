@@ -6,6 +6,8 @@ class LoginController extends Controller {
     async login() {
         try {
             const body = this.ctx.request.body
+
+            console.log("aaaaaaa", body);
             const data = await this.ctx.service.user.login(body.username, body.password)
             if (data) {
 
@@ -33,7 +35,7 @@ class LoginController extends Controller {
     async info() {
         const { ctx } = this
         try {
-            let token = ctx.query.token
+            let token = ctx.request.header['token']
             let decode = ctx.app.jwt.verify(token, ctx.app.config.jwt.secret)
             let userInfo = await ctx.service.user.findIdUser(decode.id)
             userInfo.roles = "admin"

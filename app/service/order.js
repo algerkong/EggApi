@@ -7,22 +7,26 @@ class OrderService extends Service {
         await this.app.model.Order.create(body)
     }
 
-    async getOrder(body) {
-        if (body.userId) {
-            let OrderList = await this.getOrderUser(body);
-            return OrderList
+    async getOrder(query) {
+        if (query.userId !== undefined) {
+
+            return await this.getOrderUser(query);
         } else {
-            let OrderList = await this.getOrderAll();
-            return OrderList
+            return await this.getOrderAll(query);
         }
     }
 
     //获取订单
-    async getOrderAll(body) {
-        let offset = body ? parseInt(body.offset) : 0
-        let limit = body ? parseInt(body.limit) : 20
+    async getOrderAll(query) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         let orderList = await this.app.model.Order.findAll({
-            offset, limit,
+            offset: (page - 1) * count,
+            limit: count,
             include: [
 
                 {
@@ -52,13 +56,18 @@ class OrderService extends Service {
     }
 
     //获取订单
-    async getOrderUser(body) {
-        let offset = body.offset ? parseInt(body.offset) : 0
-        let limit = body.limit ? parseInt(body.limit) : 20
+    async getOrderUser(query) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         let orderList = await this.app.model.Order.findAll({
-            offset, limit,
+            offset: (page - 1) * count,
+            limit: count,
             where: {
-                userId: body.userId
+                userId: query.userId
             },
             include: [
 
@@ -100,10 +109,15 @@ class OrderService extends Service {
     //模糊查询订单
     async findFuzzyOrder(str, body) {
         const Op = this.app.Sequelize.Op
-        let offset = body.offset ? parseInt(body.offset) : 0
-        let limit = body.limit ? parseInt(body.limit) : 20
+        let page = 1
+        let count = 20
+        if (body.page !== undefined && body.count !== undefined) {
+            page = parseInt(body.page)
+            count = parseInt(body.count)
+        }
         await this.app.model.Order.findAll({
-            offset, limit,
+            offset: (page - 1) * count,
+            limit: count,
             where: {
                 [Op.or]: [
                     { title: { [Op.like]: `%${str}%` } },
@@ -138,22 +152,26 @@ class OrderService extends Service {
     //获取接收订单
     async getReceiveOrder(body) {
         if (body.userId) {
-            let OrderList = await this.getReceiveOrderUser(body);
+            let OrderList = await this.getReceiveOrderUser(query);
             return OrderList
         } else {
-            let OrderList = await this.getReceiveOrderAll();
+            let OrderList = await this.getReceiveOrderAll(query);
             return OrderList
         }
     }
 
     //获取接收订单
-    async getReceiveOrderAll(body) {
-        let offset = body ? parseInt(body.offset) : 0
-        let limit = body ? parseInt(body.limit) : 20
+    async getReceiveOrderAll(query) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         let orderList = await this.app.model.ReceiveOrder.findAll({
-            offset, limit,
+            offset: (page - 1) * count,
+            limit: count,
             include: [
-
                 {
                     model: this.ctx.model.User
                 },
@@ -169,11 +187,16 @@ class OrderService extends Service {
     }
 
     //获取订单
-    async getReceiveOrderUser(body) {
-        let offset = body.offset ? parseInt(body.offset) : 0
-        let limit = body.limit ? parseInt(body.limit) : 20
+    async getReceiveOrderUser(query) {
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         let orderList = await this.app.model.ReceiveOrder.findAll({
-            offset, limit,
+            offset: (page - 1) * count,
+            limit: count,
             where: {
                 userId: body.userId
             },

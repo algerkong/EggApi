@@ -8,8 +8,7 @@ module.exports = () => {
 
                 if (decode.username) {
                     let user = await ctx.service.user.findNameUser(decode.username)
-                    console.log("user", user);
-                    if (user.username = decode.username) {
+                    if (user) {
                         await next()
                     }
                 } else {

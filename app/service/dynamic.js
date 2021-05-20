@@ -181,7 +181,7 @@ class DynamicService extends Service {
     }
 
     //获取点赞列表
-    async getPraiseList(body) {
+    async getPraiseList(query) {
         let page = 1
         let count = 20
         if (query.page !== undefined && query.count !== undefined) {
