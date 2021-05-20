@@ -34,7 +34,9 @@ class UserService extends Service {
                 id
             }
         })
-        return user
+
+        console.log(user, "获取用户信息");
+        return user.dataValues
     }
 
     //删除账号
@@ -65,11 +67,12 @@ class UserService extends Service {
                     username
                 }
             })
-
+            console.log(user, "aaaaaaaaaaaaa");
             if (user) {
                 if (password == user.password) {
                     const token = this.app.jwt.sign({
-                        username: username
+                        username: username,
+                        id: user.dataValues.id
                     }, this.app.config.jwt.secret)
                     return { token, user }
                 } else {

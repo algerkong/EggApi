@@ -10,6 +10,8 @@ module.exports = app => {
 
   //登陆
   router.post('/api/login', controller.login.login)
+  router.get('/api/login/info', controller.login.info)
+  router.get('/api/login/logout', controller.login.logout)
 
   //用户接口
   // router.resources('user', '/api/user', app.middleware.checktoken(), controller.user)

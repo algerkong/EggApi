@@ -26,7 +26,14 @@ module.exports = appInfo => {
   config.security = {
     csrf: {
       enable: false
-    }
+    },
+    domainWhiteList: ['*']
+  }
+
+  config.cors = {
+    origin: ctx => ctx.get('origin'),
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+    credentials: true
   }
 
   config.jwt = {
@@ -34,36 +41,32 @@ module.exports = appInfo => {
   }
 
 
-  config.cors = {
-    origin: "*",
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
-    credentials: true
-  }
+
 
   config.view = {
     defaultViewEngine: 'nunjucks'
   }
 
-  //学校
-  config.sequelize = {
-    delect: 'mysql',
-    database: 'photo',
-    host: 'localhost',
-    post: 3306,
-    username: 'photo',
-    password: 'photo',
-    timezone: '+08:00'
-  }
-  // // 公司
+  // //学校
   // config.sequelize = {
   //   delect: 'mysql',
   //   database: 'photo',
   //   host: 'localhost',
   //   post: 3306,
-  //   username: 'root',
-  //   password: '123456',
+  //   username: 'photo',
+  //   password: 'photo',
   //   timezone: '+08:00'
   // }
+  // 公司
+  config.sequelize = {
+    delect: 'mysql',
+    database: 'photo',
+    host: 'localhost',
+    post: 3306,
+    username: 'root',
+    password: '123456',
+    timezone: '+08:00'
+  }
   return {
     ...config,
     ...userConfig,
