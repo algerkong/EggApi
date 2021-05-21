@@ -40,7 +40,6 @@ class LoginController extends Controller {
             let userInfo = await ctx.service.user.findIdUser(decode.id)
             userInfo.roles = "admin"
             userInfo.name = userInfo.nickName
-            userInfo.avatar = "https://gitee.com/codeluojay/TyproaImage/raw/master/images/springboot-vue-structure.png"
             ctx.body = {
                 code: 200,
                 message: "获取用户信息",
