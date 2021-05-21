@@ -24,9 +24,6 @@ module.exports = app => {
   //动态 评论 用户 图片添加
   router.post('/api/dynamic/addimg', controller.dynamic.addImg)
 
-  //模糊查询动态
-  router.get('/api/dynamic/search', controller.dynamic.getFuzzy)
-
 
   //点赞接口
   router.resources('praise', '/api/praise', controller.praise)
@@ -39,7 +36,6 @@ module.exports = app => {
 
   //评论
   router.resources('comment', '/api/comment', controller.comment)
-  router.get('/api/comment/all', controller.comment.getCommentList)
 
   //订单接口
   router.resources('order', '/api/order', controller.order)
@@ -51,7 +47,7 @@ module.exports = app => {
   //图片上传接口
   router.post('/api/upload', controller.upload.index)
   //获取全部图片接口
-  router.get('/api/img/all', controller.upload.getImgList)
+  router.post('/api/img', controller.upload.getImgList)
   //删除图片
-  router.put('/api/img', controller.upload.destory)
+  router.delete('/api/img', controller.upload.destory)
 };

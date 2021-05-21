@@ -5,6 +5,8 @@ class UserService extends Service {
 
     //账号添加
     async createUser(body) {
+        if (body.avatar == undefined || body.avatar == "")
+            body.avatar = "/public/uploads/avatar.jpg"
         await this.app.model.User.create(body)
         return true
     }
@@ -13,18 +15,26 @@ class UserService extends Service {
 
     //获取账号列表
 
-    async getUserList(query) {
+    async getUserList(query = {}) {
 
         console.log(query);
         try {
-            if (query.username) {
-                return await this.findNameUser(query.username, query)
-            } else {
-                return await this.getUser(query)
+            if (query.str) {
+                return {
+                    list: await this.findNameUser(query.str, query),
+                    total: await this.getUserTotal(query.str)
+                }
+            }
+            return {
+                list: await this.getUser(query),
+                total: await this.getUserTotal()
             }
         } catch (e) {
             console.log(e);
-            return await this.getUser(query)
+            return {
+                list: await this.getUser(query),
+                total: await this.getUserTotal()
+            }
         }
     }
 
@@ -37,24 +47,58 @@ class UserService extends Service {
         }
         const userList = await this.app.model.User.findAll({
             offset: (page - 1) * count,
-            limit: count
+            limit: count,
+            order: [
+                ['created_at', 'DESC']
+            ],
         })
+
         return userList
     }
 
-    async findNameUser(username, query) {
+
+    async getUserTotal(str) {
+        const Op = this.app.Sequelize.Op
+        let total
+        if (str !== undefined) {
+            total = await this.app.model.User.count({
+                where: {
+                    [Op.or]: [
+                        { username: { [Op.like]: `%${str}%` } },
+                        { nickName: { [Op.like]: `%${str}%` } },
+                    ]
+                },
+                order: [
+                    ['created_at', 'DESC']
+                ],
+            })
+        } else {
+            total = await this.app.model.User.count()
+        }
+        return total
+    }
+
+    async findNameUser(str, query = {}) {
+        const Op = this.app.Sequelize.Op
         let page = 1
         let count = 20
-        // if (query.page !== undefined && query.count !== undefined) {
-        //     page = parseInt(query.page)
-        //     count = parseInt(query.count)
-        // }
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         const userList = await this.app.model.User.findAll({
             offset: (page - 1) * count,
             limit: count,
+
             where: {
-                username: username
-            }
+                [Op.or]: [
+                    { username: { [Op.like]: `%${str}%` } },
+                    { nickName: { [Op.like]: `%${str}%` } },
+                ]
+            },
+            order: [
+                ['created_at', 'DESC']
+            ],
         })
         return userList
     }

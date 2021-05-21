@@ -79,24 +79,6 @@ class DynamicController extends Controller {
         }
     }
 
-    async getFuzzy() {
-        const { ctx } = this;
-        try {
-            const str = ctx.query.str
-            let dynamicList = await ctx.service.dynamic.findFuzzyDynamic(str, ctx.query)
-            this.ctx.body = {
-                code: 200,
-                msg: '请求成功',
-                body: dynamicList
-            }
-        } catch (error) {
-            console.log(error);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
-            }
-        }
-    }
 
     async addImg() {
         const body = this.ctx.request.body
@@ -109,7 +91,7 @@ class DynamicController extends Controller {
             }
         } catch (error) {
             console.log(error);
-            ctx.body = {
+            this.ctx.body = {
                 code: 400,
                 msg: '请求失败'
             }

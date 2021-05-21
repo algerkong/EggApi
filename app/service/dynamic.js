@@ -9,6 +9,7 @@ class DynamicService extends Service {
         return true
     }
 
+    //删除
     async deleteDynamic(id) {
         await this.app.model.Dynamic.destroy({
             where: {
@@ -29,12 +30,16 @@ class DynamicService extends Service {
     //获取动态列表详情
     async getDynamicList(query) {
 
+        if (query.str !== undefined) {
+            return await this.findFuzzyDynamic(query.str, query)
+        }
+
         if (query.userId !== undefined) {
 
             return await this.getUserDynamic(query.userId, query)
-        } else {
-            return await this.getList(query)
         }
+
+        return await this.getList(query)
     }
 
     async getList(query) {
@@ -126,13 +131,17 @@ class DynamicService extends Service {
     }
 
     //模糊查询动态
-    async findFuzzyDynamic(str, body) {
+    async findFuzzyDynamic(str, query) {
         const Op = this.app.Sequelize.Op
-        let offset = body ? parseInt(body.offset) : 0
-        let limit = body ? parseInt(body.limit) : 20
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         const dynamicList = await this.app.model.Dynamic.findAll({
-            offset: offset,
-            limit: limit,
+            offset: (page - 1) * count,
+            limit: count,
             where: {
                 [Op.or]: [
                     { title: { [Op.like]: `%${str}%` } },
@@ -140,6 +149,28 @@ class DynamicService extends Service {
                     { html_text: { [Op.like]: `%${str}%` } },
                 ]
             },
+            include: [{
+                model: this.ctx.model.User
+            },
+            {
+                model: this.ctx.model.Img
+            },
+            {
+                model: this.ctx.model.Comment,
+                include: [
+                    {
+                        model: this.ctx.model.User
+                    }
+                ]
+            },
+            {
+                model: this.ctx.model.Praise,
+                include: [
+                    {
+                        model: this.ctx.model.User
+                    }
+                ]
+            }],
             order: [
                 ['created_at', 'DESC']
             ],

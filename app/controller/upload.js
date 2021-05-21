@@ -7,16 +7,22 @@ const pump = require('mz-modules/pump')
 
 class UploadController extends Controller {
     async index() {
+
         const stream = await this.ctx.getFileStream();
-        const fileName = new Date().getTime() + path.extname(stream.fieldname).toLowerCase()
+        console.log(stream, "文件上传");
+        const fileName = new Date().getTime() + path.extname(stream.fieldname).toLowerCase() + '.jpg'
         const target = path.join(this.config.baseDir, 'app/public/uploads', fileName)
         const writeStream = fs.createWriteStream(target)
         await pump(stream, writeStream)
+        stream.fields.src = `/public/uploads/${fileName}`
+        await this.ctx.service.img.createImg(stream.fields)
         this.ctx.body = {
             code: 200,
+            message: "图片添加成功",
             data: {
                 name: fileName,
-                file: `/uploads/${fileName}`
+                file: `/public/uploads/${fileName}`,
+                img: stream.fields
             }
         }
         console.log(this.ctx.body);
@@ -24,7 +30,9 @@ class UploadController extends Controller {
 
     async getImgList() {
         try {
-            const imgList = await this.ctx.service.img.getImgList()
+            let query = this.ctx.query
+            let body = this.ctx.request.body
+            const imgList = await this.ctx.service.img.getImgList(query, body)
             this.ctx.body = {
                 code: 200,
                 message: "获取成功",
@@ -41,7 +49,7 @@ class UploadController extends Controller {
 
     async destory() {
         try {
-            let id = this.ctx.params.id
+            let id = this.ctx.query.id
             await this.ctx.service.img.deleteImg(id)
             this.ctx.body = {
                 code: 200,

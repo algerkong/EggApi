@@ -9,8 +9,17 @@ class CommentService extends Service {
         return true
     }
 
+
+    async getCommentList(query) {
+        if (query.id !== undefined) {
+            return await this.getDynamicCommentList(query)
+        } else {
+            return await this.getCommentListAll(query)
+        }
+    }
+
     //获取评论列表
-    async getCommentList(body) {
+    async getDynamicCommentList(query) {
         let page = 1
         let count = 20
         if (query.page !== undefined && query.count !== undefined) {
@@ -20,7 +29,14 @@ class CommentService extends Service {
         let commentList = await this.app.model.Comment.findAll({
             offset: (page - 1) * count,
             limit: count,
-            where: body,
+            where: {
+                dynamicId: query.id
+            },
+            include: [
+                {
+                    model: this.ctx.model.User
+                }
+            ],
             order: [
                 ['created_at', 'DESC']
             ],
@@ -29,7 +45,7 @@ class CommentService extends Service {
     }
 
     //获取全部评论列表
-    async getCommentListAll() {
+    async getCommentListAll(query) {
         let page = 1
         let count = 20
         if (query.page !== undefined && query.count !== undefined) {
@@ -40,6 +56,11 @@ class CommentService extends Service {
             {
                 offset: (page - 1) * count,
                 limit: count,
+                include: [
+                    {
+                        model: this.ctx.model.User
+                    }
+                ],
                 order: [
                     ['created_at', 'DESC']
                 ],

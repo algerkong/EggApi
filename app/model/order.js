@@ -38,7 +38,7 @@ module.exports = app => {
 
         //与图片是一对多
         app.model.Order.hasMany(app.model.Img, {
-            foreignKey: 'ordeId'
+            foreignKey: 'orderId'
         })
     }
 

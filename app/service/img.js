@@ -6,7 +6,7 @@ class DynamicService extends Service {
         await this.app.model.Img.create(body)
     }
 
-    async getImgList(query) {
+    async getImgList(query, body) {
         let page = 1
         let count = 20
         if (query.page !== undefined && query.count !== undefined) {
@@ -17,6 +17,7 @@ class DynamicService extends Service {
         const imgList = await this.app.model.Img.findAll({
             offset: (page - 1) * count,
             limit: count,
+            where: body,
             order: [
                 ['created_at', 'DESC']
             ],
@@ -27,7 +28,7 @@ class DynamicService extends Service {
 
     //删除图片
     async deleteImg(id) {
-        await this.app.model.Img.destory({
+        await this.app.model.Img.destroy({
             where: {
                 id
             }
