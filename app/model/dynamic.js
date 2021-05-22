@@ -17,8 +17,7 @@ module.exports = app => {
                 primaryKey: true
             },
             title: STRING,
-            md_text: TEXT,
-            html_text: TEXT,
+            content: TEXT,
             status: {
                 type: INTEGER,
                 defaultValue: 0

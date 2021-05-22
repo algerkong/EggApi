@@ -7,27 +7,12 @@ class UserController extends Controller {
         const { ctx } = this;
         try {
             const body = ctx.request.body
-            const query = ctx.query
-
-            console.log(body);
-            if (await ctx.service.user.findNameUser(body.username)) {
-                await ctx.service.user.createUser(body)
-                this.ctx.body = {
-                    code: 200,
-                    msg: '添加成功',
-                    body: body
-                }
-            } else {
-                this.ctx.body = {
-                    code: 201,
-                    msg: '用户名已存在'
-                }
-            }
+            await ctx.service.user.createUser(body)
         } catch (error) {
             console.log(error);
             this.ctx.body = {
                 code: 400,
-                msg: '添加失败'
+                message: '请求失败'
             }
         }
     }
@@ -46,7 +31,7 @@ class UserController extends Controller {
             console.log(error);
             ctx.body = {
                 code: 400,
-                msg: '请求失败'
+                message: '请求失败'
             }
         }
     }
@@ -64,7 +49,7 @@ class UserController extends Controller {
             console.log(error);
             ctx.body = {
                 code: 400,
-                msg: '请求失败'
+                message: '请求失败'
             }
         }
     }
@@ -79,20 +64,20 @@ class UserController extends Controller {
                 await ctx.service.user.updateUser(id, body)
                 this.ctx.body = {
                     code: 200,
-                    msg: '修改成功',
+                    message: '修改成功',
                     body: body
                 }
             } else {
                 this.ctx.body = {
                     code: 201,
-                    msg: '用户名已存在'
+                    message: '用户名已存在'
                 }
             }
         } catch (error) {
             console.log(error);
             ctx.body = {
                 code: 400,
-                msg: '请求失败'
+                message: '请求失败'
             }
         }
     }

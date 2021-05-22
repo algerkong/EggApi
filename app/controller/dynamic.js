@@ -8,11 +8,7 @@ class DynamicController extends Controller {
         try {
             const body = ctx.request.body
             await ctx.service.dynamic.createDyanmic(body)
-            this.ctx.body = {
-                code: 200,
-                msg: '添加成功',
-                body: body
-            }
+
         } catch (error) {
             console.log(error);
             this.ctx.body = {

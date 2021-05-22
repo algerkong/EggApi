@@ -9,8 +9,9 @@ class OrderService extends Service {
 
     async getOrder(query) {
         if (query.userId !== undefined) {
-
             return await this.getOrderUser(query);
+        } else if (query.str !== undefined) {
+            return await this.findFuzzyOrder(query.str, query);
         } else {
             return await this.getOrderAll(query);
         }
@@ -24,7 +25,7 @@ class OrderService extends Service {
             page = parseInt(query.page)
             count = parseInt(query.count)
         }
-        let orderList = await this.app.model.Order.findAll({
+        let orderList = await this.app.model.Order.findAndCountAll({
             offset: (page - 1) * count,
             limit: count,
             include: [
@@ -52,7 +53,10 @@ class OrderService extends Service {
                 ['created_at', 'DESC']
             ],
         })
-        return orderList
+        return {
+            list: orderList.rows,
+            total: orderList.count
+        }
     }
 
     //获取订单
@@ -63,7 +67,7 @@ class OrderService extends Service {
             page = parseInt(query.page)
             count = parseInt(query.count)
         }
-        let orderList = await this.app.model.Order.findAll({
+        let orderList = await this.app.model.Order.findAndCountAll({
             offset: (page - 1) * count,
             limit: count,
             where: {
@@ -85,7 +89,10 @@ class OrderService extends Service {
                 ['created_at', 'DESC']
             ],
         })
-        return orderList
+        return {
+            list: orderList.rows,
+            total: orderList.count
+        }
     }
 
     //修改订单
@@ -107,15 +114,15 @@ class OrderService extends Service {
     }
 
     //模糊查询订单
-    async findFuzzyOrder(str, body) {
+    async findFuzzyOrder(str, query) {
         const Op = this.app.Sequelize.Op
         let page = 1
         let count = 20
-        if (body.page !== undefined && body.count !== undefined) {
-            page = parseInt(body.page)
-            count = parseInt(body.count)
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
         }
-        await this.app.model.Order.findAll({
+        let orderList = await this.app.model.Order.findAndCountAll({
             offset: (page - 1) * count,
             limit: count,
             where: {
@@ -139,6 +146,11 @@ class OrderService extends Service {
                 ['created_at', 'DESC']
             ],
         })
+
+        return {
+            list: orderList.rows,
+            total: orderList.count
+        }
     }
 
 

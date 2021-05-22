@@ -6,6 +6,11 @@ class DynamicService extends Service {
     //动态添加
     async createDyanmic(body) {
         await this.app.model.Dynamic.create(body)
+        this.ctx.body = {
+            code: 200,
+            msg: '添加成功',
+            body: body
+        }
         return true
     }
 
@@ -30,16 +35,21 @@ class DynamicService extends Service {
     //获取动态列表详情
     async getDynamicList(query) {
 
+        let dynamicList = null
+
         if (query.str !== undefined) {
-            return await this.findFuzzyDynamic(query.str, query)
+            dynamicList = await this.findFuzzyDynamic(query.str, query)
+        } else if (query.userId !== undefined) {
+
+            dynamicList = await this.getUserDynamic(query.userId, query)
+        } else {
+            dynamicList = await this.getList(query)
         }
 
-        if (query.userId !== undefined) {
-
-            return await this.getUserDynamic(query.userId, query)
+        return {
+            list: dynamicList.rows,
+            total: dynamicList.count
         }
-
-        return await this.getList(query)
     }
 
     async getList(query) {
@@ -49,7 +59,7 @@ class DynamicService extends Service {
             page = parseInt(query.page)
             count = parseInt(query.count)
         }
-        const dynamicList = await this.app.model.Dynamic.findAll({
+        const dynamicList = await this.app.model.Dynamic.findAndCountAll({
             offset: (page - 1) * count,
             limit: count,
             include: [
@@ -94,7 +104,7 @@ class DynamicService extends Service {
             page = parseInt(query.page)
             count = parseInt(query.count)
         }
-        const dynamicList = await this.app.model.Dynamic.findAll({
+        const dynamicList = await this.app.model.Dynamic.findAndCountAll({
             offset: (page - 1) * count,
             limit: count,
             where: {
@@ -133,20 +143,22 @@ class DynamicService extends Service {
     //模糊查询动态
     async findFuzzyDynamic(str, query) {
         const Op = this.app.Sequelize.Op
+
+        console.log(query, str);
+
         let page = 1
         let count = 20
         if (query.page !== undefined && query.count !== undefined) {
             page = parseInt(query.page)
             count = parseInt(query.count)
         }
-        const dynamicList = await this.app.model.Dynamic.findAll({
+        const dynamicList = await this.app.model.Dynamic.findAndCountAll({
             offset: (page - 1) * count,
             limit: count,
             where: {
                 [Op.or]: [
                     { title: { [Op.like]: `%${str}%` } },
-                    { md_text: { [Op.like]: `%${str}%` } },
-                    { html_text: { [Op.like]: `%${str}%` } },
+                    { content: { [Op.like]: `%${str}%` } }
                 ]
             },
             include: [{
@@ -173,7 +185,7 @@ class DynamicService extends Service {
             }],
             order: [
                 ['created_at', 'DESC']
-            ],
+            ]
         })
         return dynamicList
     }

@@ -4,9 +4,9 @@ const Controller = require('egg').Controller;
 
 class OrderController extends Controller {
     async index() {
-        let body = this.ctx.query
+        let query = this.ctx.query
         try {
-            let orderList = await this.ctx.service.order.getOrder(body)
+            let orderList = await this.ctx.service.order.getOrder(query)
             this.ctx.body = {
                 code: 200,
                 msg: '请求成功',
@@ -73,25 +73,6 @@ class OrderController extends Controller {
             ctx.body = {
                 code: 400,
                 msg: '删除订单失败'
-            }
-        }
-    }
-
-    async fuzzyOrder() {
-        let str = this.ctx.query.str
-        try {
-            let orderList = this.ctx.service.order.findFuzzyOrder(str)
-            this.ctx.body = {
-                code: 200,
-                msg: '请求成功',
-                data: orderList
-            }
-
-        } catch (error) {
-            console.log(error);
-            ctx.body = {
-                code: 400,
-                msg: '请求失败'
             }
         }
     }

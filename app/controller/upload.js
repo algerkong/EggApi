@@ -49,7 +49,7 @@ class UploadController extends Controller {
 
     async destory() {
         try {
-            let id = this.ctx.query.id
+            let id = this.ctx.params.id
             await this.ctx.service.img.deleteImg(id)
             this.ctx.body = {
                 code: 200,

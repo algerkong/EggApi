@@ -14,7 +14,7 @@ class DynamicService extends Service {
             count = parseInt(query.count)
         }
 
-        const imgList = await this.app.model.Img.findAll({
+        const imgList = await this.app.model.Img.findAndCountAll({
             offset: (page - 1) * count,
             limit: count,
             where: body,
@@ -23,7 +23,10 @@ class DynamicService extends Service {
             ],
         })
 
-        return imgList
+        return {
+            list: imgList.rows,
+            total: imgList.count
+        }
     }
 
     //删除图片

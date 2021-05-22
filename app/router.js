@@ -39,7 +39,6 @@ module.exports = app => {
 
   //订单接口
   router.resources('order', '/api/order', controller.order)
-  router.get('/api/order/search', controller.order.fuzzyOrder)
   //接收订单
   router.resources('receiveOrder', '/api/receiveorder', controller.receiveOrder)
 
@@ -49,5 +48,5 @@ module.exports = app => {
   //获取全部图片接口
   router.post('/api/img', controller.upload.getImgList)
   //删除图片
-  router.delete('/api/img', controller.upload.destory)
+  router.delete('/api/img/:id', controller.upload.destory)
 };

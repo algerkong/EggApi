@@ -5,10 +5,23 @@ class UserService extends Service {
 
     //账号添加
     async createUser(body) {
-        if (body.avatar == undefined || body.avatar == "")
+        if (body.avatar == undefined || body.avatar == "") {
             body.avatar = "/public/uploads/avatar.jpg"
-        await this.app.model.User.create(body)
-        return true
+        }
+
+        if (await this.findNameUserOne(body.username)) {
+            this.ctx.body = {
+                code: 400,
+                message: '用户已经存在'
+            }
+        } else {
+            await this.app.model.User.create(body)
+            this.ctx.body = {
+                code: 200,
+                message: '添加成功',
+                body: body
+            }
+        }
     }
 
 
@@ -16,8 +29,6 @@ class UserService extends Service {
     //获取账号列表
 
     async getUserList(query = {}) {
-
-        console.log(query);
         try {
             if (query.str) {
                 return {
@@ -101,6 +112,16 @@ class UserService extends Service {
             ],
         })
         return userList
+    }
+
+    async findNameUserOne(username) {
+        const user = await this.app.model.User.findOne({
+            where: {
+                username: username
+            }
+        })
+
+        return user
     }
 
     async findIdUser(id) {

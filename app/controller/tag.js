@@ -7,41 +7,32 @@ class TagController extends Controller {
         const { ctx } = this;
         const body = ctx.request.body
         try {
-            let isTag = await ctx.service.tag.createTag(body)
-            if (isTag) {
-                this.ctx.body = {
-                    code: 200,
-                    msg: '添加成功'
-                }
-            } else {
-                this.ctx.body = {
-                    code: 201,
-                    msg: '标签已经存在'
-                }
-            }
+            await ctx.service.tag.createTag(body)
+
 
         } catch (e) {
             console.log(e);
             ctx.body = {
                 code: 400,
-                msg: '请求失败'
+                message: '请求失败'
             }
         }
     }
 
     async index() {
         try {
-            let tagList = await this.ctx.service.tag.getTagList()
+            let query = this.ctx.query
+            let tagList = await this.ctx.service.tag.getTagList(query)
             this.ctx.body = {
                 code: 200,
-                msg: '请求成功',
+                message: '请求成功',
                 data: tagList
             }
         } catch (e) {
             console.log(e);
             ctx.body = {
                 code: 400,
-                msg: '请求失败'
+                message: '请求失败'
             }
         }
     }
@@ -52,13 +43,13 @@ class TagController extends Controller {
             await this.service.tag.deleteTag(id)
             this.ctx.body = {
                 code: 200,
-                msg: '删除成功'
+                message: '删除成功'
             }
         } catch (e) {
             console.log(e);
             ctx.body = {
                 code: 400,
-                msg: '请求失败'
+                message: '请求失败'
             }
         }
     }
@@ -73,20 +64,20 @@ class TagController extends Controller {
                 await ctx.service.tag.updateTag(id, body)
                 this.ctx.body = {
                     code: 200,
-                    msg: '修改成功',
+                    message: '修改成功',
                     body: body
                 }
             } else {
                 this.ctx.body = {
                     code: 201,
-                    msg: '标签已经存在'
+                    message: '标签已经存在'
                 }
             }
         } catch (error) {
             console.log(error);
             ctx.body = {
                 code: 400,
-                msg: '请求失败'
+                message: '请求失败'
             }
         }
     }
