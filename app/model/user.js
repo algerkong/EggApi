@@ -44,11 +44,6 @@ module.exports = app => {
             foreignKey: 'userId'
         })
 
-        //与点赞是一对多
-        app.model.User.hasMany(app.model.Img, {
-            foreignKey: 'userId'
-        })
-
         // 与订单是一对多
         app.model.User.hasMany(app.model.Order, {
             foreignKey: 'userId'
