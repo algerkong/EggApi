@@ -21,11 +21,7 @@ module.exports = app => {
             status: {
                 type: INTEGER,
                 defaultValue: 0
-            },
-            type: {
-                type: INTEGER,
-                defaultValue: 0
-            },
+            }
         }
     )
 
