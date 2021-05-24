@@ -30,7 +30,7 @@ class TagController extends Controller {
             }
         } catch (e) {
             console.log(e);
-            ctx.body = {
+            this.ctx.body = {
                 code: 400,
                 message: '请求失败'
             }

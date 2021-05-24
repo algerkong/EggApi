@@ -70,7 +70,7 @@ class UserController extends Controller {
             } else {
                 this.ctx.body = {
                     code: 201,
-                    message: '用户名已存在'
+                    message: '该账号已存在'
                 }
             }
         } catch (error) {

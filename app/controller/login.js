@@ -10,8 +10,6 @@ class LoginController extends Controller {
             console.log("aaaaaaa", body);
             const data = await this.ctx.service.user.login(body.username, body.password)
             if (data) {
-
-
                 this.ctx.body = {
                     code: 200,
                     message: "登录成功",
@@ -21,7 +19,7 @@ class LoginController extends Controller {
             } else {
                 this.ctx.body = {
                     code: 400,
-                    message: "登录失败, 账号或密码错误"
+                    message: "账号或密码错误"
                 }
             }
         } catch (error) {
