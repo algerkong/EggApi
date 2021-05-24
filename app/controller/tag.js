@@ -8,8 +8,6 @@ class TagController extends Controller {
         const body = ctx.request.body
         try {
             await ctx.service.tag.createTag(body)
-
-
         } catch (e) {
             console.log(e);
             ctx.body = {

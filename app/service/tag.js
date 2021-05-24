@@ -5,7 +5,12 @@ class TagService extends Service {
 
     //标签添加
     async createTag(body) {
-        if (await this.getIsTag(body.name)) {
+
+        let is = await this.getIsTag(body.name)
+        console.log(is, body, "aaaaaaaaaaa");
+
+        if (is) {
+
             this.ctx.body = {
                 code: 201,
                 message: '标签已经存在'
@@ -20,8 +25,6 @@ class TagService extends Service {
             }
             return true
         }
-
-
     }
 
 
@@ -32,7 +35,13 @@ class TagService extends Service {
             }
         })
 
-        return isTag
+        console.log(isTag);
+
+        if (isTag) {
+            return false
+        } else {
+            return true
+        }
     }
 
     async getTagList(query) {
