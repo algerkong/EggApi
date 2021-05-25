@@ -13,6 +13,10 @@ module.exports = app => {
   router.get('/api/login/info', app.middleware.checktoken(), controller.login.info)
   router.get('/api/login/logout', controller.login.logout)
 
+  //首页
+  router.get('/api/home/count', controller.home.getAllCount)
+  router.get('/api/home/newuser', controller.home.getNewUser)
+
   //用户接口
   // router.resources('user', '/api/user', app.middleware.checktoken(), controller.user)
   router.resources('user', '/api/user', controller.user)
@@ -20,6 +24,9 @@ module.exports = app => {
 
   //动态接口
   router.resources('dynamic', '/api/dynamic', controller.dynamic)
+
+  //获取用户最多动态数 前二十
+  router.get('/api/dynamic/count', controller.home.getUserDynamicCount)
 
   //动态 评论 用户 图片添加
   router.post('/api/dynamic/addimg', controller.dynamic.addImg)

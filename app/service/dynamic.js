@@ -254,9 +254,18 @@ class DynamicService extends Service {
 
 
     //获取动态点赞列表
-    async getDynamicPraiceList(id) {
+    async getDynamicPraiceList(id, query) {
+
+        let page = 1
+        let count = 20
+        if (query.page !== undefined && query.count !== undefined) {
+            page = parseInt(query.page)
+            count = parseInt(query.count)
+        }
         let praiseList = await this.app.model.Praise.findAll(
             {
+                offset: (page - 1) * count,
+                limit: count,
                 where: {
                     dynamicId: id
                 },
@@ -299,6 +308,8 @@ class DynamicService extends Service {
         )
         return praiseList
     }
+
+
 
 
 
