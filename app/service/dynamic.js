@@ -67,7 +67,10 @@ class DynamicService extends Service {
                     model: this.ctx.model.User
                 },
                 {
-                    model: this.ctx.model.Img
+                    model: this.ctx.model.Img,
+                    order: [
+                        ['created_at', 'DESC']
+                    ],
                 },
                 {
                     model: this.ctx.model.Comment,
@@ -75,7 +78,10 @@ class DynamicService extends Service {
                         {
                             model: this.ctx.model.User
                         }
-                    ]
+                    ],
+                    order: [
+                        ['created_at', 'DESC']
+                    ],
                 },
                 {
                     model: this.ctx.model.Tag,
@@ -86,7 +92,10 @@ class DynamicService extends Service {
                         {
                             model: this.ctx.model.User
                         }
-                    ]
+                    ],
+                    order: [
+                        ['created_at', 'DESC']
+                    ],
                 }],
             order: [
                 ['created_at', 'DESC']

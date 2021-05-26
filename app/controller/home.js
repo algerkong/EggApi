@@ -86,6 +86,84 @@ class HomeController extends Controller {
     }
   }
 
+  //获取今日推荐动态
+
+  async getDayDynamic() {
+    let query = this.ctx.query
+    let page = 1
+    let count = 20
+    if (query.page !== undefined && query.count !== undefined) {
+      page = parseInt(query.page)
+      count = parseInt(query.count)
+    }
+
+    const dynamicList = await this.app.model.Dynamic.findAndCountAll({
+      offset: (page - 1) * count,
+      limit: count,
+      where: {
+        status: 1
+      },
+      include: [
+        {
+          model: this.ctx.model.User
+        },
+        {
+          model: this.ctx.model.Img,
+          order: [
+            ['created_at', 'DESC']
+          ],
+        },
+        {
+          model: this.ctx.model.Comment,
+          include: [
+            {
+              model: this.ctx.model.User
+            }
+          ],
+          order: [
+            ['created_at', 'DESC']
+          ],
+        },
+        {
+          model: this.ctx.model.Tag,
+        },
+        {
+          model: this.ctx.model.Praise,
+          include: [
+            {
+              model: this.ctx.model.User
+            }
+          ],
+          order: [
+            ['created_at', 'DESC']
+          ],
+        }],
+      order: [
+        ['created_at', 'DESC']
+      ],
+      distinct: true
+    })
+
+    let rows = []
+    dynamicList.rows.forEach(element => {
+      if (element.imgs.length > 0) {
+        rows.push(element)
+      }
+    });
+
+
+
+    this.ctx.body = {
+      code: 200,
+      msg: '获取成功',
+      data: {
+        list: rows,
+        total: dynamicList.count
+      }
+    }
+
+  }
+
 }
 
 

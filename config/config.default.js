@@ -99,7 +99,8 @@ module.exports = appInfo => {
     host: 'localhost',
     post: 3306,
     username: 'root',
-    password: '123456'
+    password: '123456',
+    timezone: '-08:00'
   }
 
   return {

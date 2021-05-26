@@ -16,6 +16,7 @@ module.exports = app => {
   //首页
   router.get('/api/home/count', controller.home.getAllCount)
   router.get('/api/home/newuser', controller.home.getNewUser)
+  router.get('/api/home/daydynamic', controller.home.getDayDynamic)
 
   //用户接口
   // router.resources('user', '/api/user', app.middleware.checktoken(), controller.user)
@@ -56,4 +57,7 @@ module.exports = app => {
   router.post('/api/img', controller.upload.getImgList)
   //删除图片
   router.delete('/api/img/:id', controller.upload.destory)
+
+  //轮播图接口
+  router.resources('banner', '/api/banner', controller.banner)
 };
